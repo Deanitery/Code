@@ -1,24 +1,41 @@
 #include<bits/stdc++.h>
 using namespace std;
 int n,m,q;
-struct P30{
-	int mp[1005][1005];
+struct P50{
+	#define Mn 50005
+	#define LL long long
+	long long mp[505][Mn],lst[Mn];
+	int qx[Mn],qy[Mn],h[Mn],A[Mn];
 	void solve(){
-		int x,y,i,j;
-		for(i=1;i<=n;i++)
-			for(j=1;j<=m;j++)
-				mp[i][j]=(i-1)*m+j;
+		int x,y,i,j,t=0;
 		for(i=1;i<=q;i++){
-			scanf("%d%d",&x,&y);
-			printf("%d\n",mp[x][y]);
-			int t=mp[x][y];
-			for(j=y;j<=m;j++)mp[x][j]=mp[x][j+1];
-			for(j=x;j<=n;j++)mp[j][m]=mp[j+1][m];
-			mp[n][m]=t;
+			scanf("%d%d",&qx[i],&qy[i]);
+			h[++t]=qx[i];
+		}
+		sort(h+1,h+1+q);
+		t=unique(h+1,h+1+q)-h-1;
+		for(i=1;i<=q;i++){
+			qx[i]=lower_bound(h+1,h+1+t,qx[i])-h;
+			if(!mp[qx[i]][1])
+				for(j=1;j<m;j++)
+					mp[qx[i]][j]=j+1LL*(h[qx[i]]-1)*m;
+		}
+		for(i=1;i<=n;i++)lst[i]=lst[i-1]+m;
+		for(i=1;i<=q;i++){
+			x=qx[i],y=qy[i];
+			long long ans;
+			if(y!=m)printf("%lld\n",ans=mp[x][y]);
+			else printf("%lld\n",ans=lst[h[x]]);
+			if(y!=m){
+				for(j=y;j<m-1;j++)mp[x][j]=mp[x][j+1];
+				mp[x][m-1]=lst[h[x]];
+			}
+			for(j=h[x];j<n;j++)lst[j]=lst[j+1];
+			lst[n]=ans;
 		}
 	}
-}p30;
-struct Px1{
+}p50;
+struct P_x_1{
 	#define M 1000005
 	#define Ls p<<1
 	#define Rs p<<1|1
@@ -80,20 +97,9 @@ struct Px1{
 		}
 	}
 }px1;
-struct P20{
-	void solve(){
-		
-		
-		
-		
-		
-	}
-};
 int main(){
-//	freopen("phalanx.in","r",stdin);
-//	freopen("phalanx.out","w",stdout);
 	scanf("%d%d%d",&n,&m,&q);
-	if(q<=500)p30.solve();
+	if(q<=500)p50.solve();
 	else px1.solve();
 	return 0;
 }

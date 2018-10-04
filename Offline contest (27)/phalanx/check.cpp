@@ -21,6 +21,8 @@ int query(int L,int R,int &tid,int x){
 	return query(mid+1,R,Rson[tid],x-v);
 }
 int main(){
+	freopen("data.in","r",stdin);
+	freopen("check.out","w",stdout);
 	scanf("%d%d%d",&n,&m,&q);
 	int x,y,i;
 	for(i=1;i<=n;i++)

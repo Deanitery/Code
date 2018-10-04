@@ -40,24 +40,25 @@ int dfs(int x,int f){
 	int &res=dp[x][f];
 	if(in[x][f])return res=-1;
 	if(dp[x][f]!=0)return res;
-	res=(x==n);in[x][f]=1;
+	in[x][f]=1;
+	res=(x==n);
 	for(int i=0;i<E1[x].size();i++){
 		int y=E1[x][i].to,z=E1[x][i].cost;
 		if(dis[x]+f-dis[y]>=z){
 			int lim=dis[x]+f-dis[y]-z,v;
-			if(v=dfs(y,lim)==-1)return res=-1;
+			v=dfs(y,lim);
+			if(v==-1)return res=-1;
 			Add(res,v);
-			printf("%d %d->%d %d\n",y,lim,x,f);
 		}
 	}
-	printf("%d %d %d\n",x,f,res);
 	in[x][f]=0;
 	return res;
 }
 void Clear(){
+	memset(dp,0,sizeof(dp));
+	memset(in,0,sizeof(in));
 	for(int i=1;i<=n;i++){
-		for(int j=0;j<=K;j++)
-			dp[i][j]=0;
+		vis[i]=0;
 		E1[i].clear();
 		E2[i].clear();		
 	}
@@ -74,13 +75,6 @@ int main(){
 			E2[y].push_back((edge){x,z});
 		}
 		Dijk();
-		for(i=1;i<=n;i++){
-			printf("dis:%d %d\n",i,dis[i]);
-//			for(int j=0;j<=K;j++){
-////				printf("%d %d %d\n",i,j,dp[i][j]);
-//			}
-		}
-puts("enter");
 		printf("%d\n",dfs(1,K));
 		Clear();
 	}
